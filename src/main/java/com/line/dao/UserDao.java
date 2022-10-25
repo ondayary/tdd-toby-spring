@@ -1,6 +1,7 @@
 package com.line.dao;
 
 import com.line.domain.User;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import javax.xml.transform.Result;
 import java.sql.*;
@@ -64,14 +65,20 @@ public class UserDao {
 
             // ResultSet 은  executeQuery()를 했을때 ResultSet을 반환한다.
             ResultSet rs = pstmt.executeQuery();
-            rs.next();
-            User user = new User(rs.getString("id"),
-                    rs.getString("name"),
-                    rs.getString("password"));
 
+            // 결과 값이 없을 때 exception처리
+            User user = null;
+            if(rs.next()) {
+                user = new User(rs.getString("id"),
+                        rs.getString("name"),
+                        rs.getString("password"));
+            };
             rs.close();
             pstmt.close();
             conn.close();
+
+            // 없으면 exception
+            if(user == null) throw new EmptyResultDataAccessException(1);
 
             return user;
         } catch (SQLException e) {
@@ -96,6 +103,7 @@ public class UserDao {
         conn = connectionMaker.makeConnection();
         pstmt = conn.prepareStatement("SELECT COUNT(*) FROM users");
         ResultSet rs = pstmt.executeQuery();
+
         rs.next();
         int count = rs.getInt(1);
 
