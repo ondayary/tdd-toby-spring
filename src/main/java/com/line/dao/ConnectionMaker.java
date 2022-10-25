@@ -4,5 +4,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public interface ConnectionMaker {
-    Connection makeConnection() throws SQLException;
+
+    // interface 도입
+    public Connection makeConnection() throws SQLException;
 }

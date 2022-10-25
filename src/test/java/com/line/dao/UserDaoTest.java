@@ -11,8 +11,7 @@ class UserDaoTest {
         UserDao userDao = new UserDaoFactory().awsUserDao();
         String id = "1";
         User user = new User(id, "test", "test");
-        userDao.add(user);
-
-        User user = userDao.findById(id);
+       assertEquals("daon", user.getName());
+       assertEquals("lee", user.getPassword());
     }
 }
